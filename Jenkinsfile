@@ -7,12 +7,6 @@ pipeline {
 
     stages {
 
-        stage('Clone Repository') {
-            steps {
-                git 'https://github.com/kinjalpatel687/Repository-name-playwright-automation.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 bat 'npm install'
@@ -31,11 +25,6 @@ pipeline {
             }
         }
 
-        stage('Generate Report') {
-            steps {
-                bat 'npx playwright show-report'
-            }
-        }
     }
 
     post {
