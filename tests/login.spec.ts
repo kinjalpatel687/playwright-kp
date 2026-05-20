@@ -1,15 +1,48 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { LoginPage } from '../Pages/LoginPage';
 
-test('login test', async ({ page }) => {
+test.describe('Login Page', () => {
 
-  await page.goto('https://the-internet.herokuapp.com/login');
+  test('Verify if user clicks on Login button without enter Email and Password', async ({ page }) => {
+    const loginPage = new LoginPage(page);
 
-  await page.locator('#username').fill('tomsmith');
+    await loginPage.gotoLoginPage();
+    await loginPage.verifyLoginFields();
+  });
 
-  await page.locator('#password').fill('SuperSecretPassword!');
+  test('Verify error message when user enters invalid email address', async ({ page }) => {
+    const loginPage = new LoginPage(page);
 
-  await page.locator('button[type="submit"]').click();
+    await loginPage.gotoLoginPage();
+    await loginPage.verifyRequiredMessages();
+  });
 
-  await expect(page.locator('#flash')).toContainText('You logged into a secure area!');
+  test('Verify invalid login', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.gotoLoginPage();
+
+    await loginPage.invalidLogin(
+      'kp',
+      'test'
+    );
+  });
+
+  test('Verify valid login and logout', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+
+    await loginPage.gotoLoginPage();
+
+    await loginPage.validLogin(
+      'psplclient17012026',
+      'Test@123459'
+    );
+
+    console.log('Login successful');
+
+    await loginPage.logout();
+
+    console.log('Logout successful');
+  });
 
 });
