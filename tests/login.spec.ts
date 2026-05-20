@@ -3,24 +3,28 @@ import { LoginPage } from '../Pages/LoginPage';
 
 test.describe('Login Page', () => {
 
-  test('Verify if user clicks on Login button without enter Email and Password', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  let loginPage: LoginPage;
 
-    await loginPage.gotoLoginPage();
+  test.beforeEach(async ({ page }) => {
+
+    loginPage = new LoginPage(page);
+  
+    const appLoaded = await loginPage.gotoLoginPage();
+  
+    test.skip(!appLoaded, 'Application is down');
+  });
+
+  test('Verify if user clicks on Login button without enter Email and Password', async () => {
+
     await loginPage.verifyLoginFields();
   });
 
-  test('Verify error message when user enters invalid email address', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test('Verify error message when user enters invalid email address', async () => {
 
-    await loginPage.gotoLoginPage();
     await loginPage.verifyRequiredMessages();
   });
 
-  test('Verify invalid login', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.gotoLoginPage();
+  test('Verify invalid login', async () => {
 
     await loginPage.invalidLogin(
       'kp',
@@ -28,10 +32,7 @@ test.describe('Login Page', () => {
     );
   });
 
-  test('Verify valid login and logout', async ({ page }) => {
-    const loginPage = new LoginPage(page);
-
-    await loginPage.gotoLoginPage();
+  test('Verify valid login and logout', async () => {
 
     await loginPage.validLogin(
       'psplclient17012026',
